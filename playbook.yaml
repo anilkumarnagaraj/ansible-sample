@@ -1,9 +1,24 @@
-- name: My first play
-  hosts: myhosts
-  tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+---
+- name: Configure IBM Cloud
+  hosts: localhost
+  gather_facts: no
+  vars:
+    required_ibm_provider_version: "1.43.0"
+    ibm_visibility: "private"
 
-   - name: Print message
-     ansible.builtin.debug:
-      msg: Hello world
+  tasks:
+    - name: Ensure IBM Cloud provider is installed (Ansible doesn't have this concept directly)
+      debug:
+        msg: "Required IBM Cloud provider version: {{ required_ibm_provider_version }}"
+
+    - name: Set up IBM Cloud provider
+      ibm.cloud_provider:
+        visibility: "{{ ibm_visibility }}"
+
+    - name: Retrieve IBM Cloud images
+      ibm.is_images_info:
+      register: ibm_images
+
+    - name: Display IBM Cloud images
+      debug:
+        var: ibm_images
