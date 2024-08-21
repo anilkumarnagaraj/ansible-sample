@@ -1,24 +1,12 @@
 ---
-- name: Configure IBM Cloud
+- name: resource_manager modules examples
   hosts: localhost
-  gather_facts: no
-  vars:
-    required_ibm_provider_version: "1.43.0"
-    ibm_visibility: "private"
-
+  gather_facts: false
   tasks:
-    - name: Ensure IBM Cloud provider is installed (Ansible doesn't have this concept directly)
+    - name: List ibm_resource_group
+      ibm_resource_group_info:
+        id: 'Default'
+      register: get_resource_group_result
+    - name: Print list result
       debug:
-        msg: "Required IBM Cloud provider version: {{ required_ibm_provider_version }}"
-
-    - name: Set up IBM Cloud provider
-      ibm.cloud_provider:
-        visibility: "{{ ibm_visibility }}"
-
-    - name: Retrieve IBM Cloud images
-      ibm.is_images_info:
-      register: ibm_images
-
-    - name: Display IBM Cloud images
-      debug:
-        var: ibm_images
+        var: get_resource_group_result
